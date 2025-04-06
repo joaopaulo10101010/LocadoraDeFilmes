@@ -2,7 +2,7 @@
 {
     public class Clientes
     {
-        public int cod_cli {  get; }
+        public int cod_cli { get; set; }
         public string usuario_cli { get; set; }
         public string senha_cli { get; set; }
         public string nome_cli { get; set; }
