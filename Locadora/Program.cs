@@ -1,7 +1,16 @@
+using Locadora.Repositorios;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+// Injeção de Dependencia
+builder.Services.AddScoped<ClienteRepositorio>();
+
+
 
 var app = builder.Build();
 
