@@ -2,15 +2,15 @@
 {
     public class Clientes
     {
-        int cod_cli {  get; }
-        string usuario_cli { get; set; }
-        string senha_cli { get; set; }
-        string nome_cli { get; set; }
-        string cpf_cli { get; set; }
-        string cep_cli { get; set; }
-        string endereco {  get; set; }
-        string complemento_cli { get; set; }
-        string estado_uf {  get; set; }
-        string observacao {  get; set; }
+        public int cod_cli {  get; }
+        public string usuario_cli { get; set; }
+        public string senha_cli { get; set; }
+        public string nome_cli { get; set; }
+        public string cpf_cli { get; set; }
+        public string cep_cli { get; set; }
+        public string endereco {  get; set; }
+        public string complemento_cli { get; set; }
+        public string estado_uf {  get; set; }
+        public string observacao {  get; set; }
     }
 }
