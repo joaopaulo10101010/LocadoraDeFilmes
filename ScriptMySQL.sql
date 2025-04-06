@@ -1,6 +1,7 @@
+
 create database dblocadora;
 use dblocadora;
-drop table Filmes;
+
 
 
 
@@ -37,6 +38,8 @@ CREATE TABLE Estabelecimentos (
 
 CREATE TABLE Clientes (
     cod_cli INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_cli varchar(50),
+    senha_cli varchar(50),
     nome_cli VARCHAR(100) NOT NULL,
     cpf_cli CHAR(11) NOT NULL,
     cep_cli CHAR(8) NOT NULL,
@@ -73,16 +76,17 @@ CREATE TABLE Carrinho (
 
 CREATE TABLE Funcionarios (
     func_cod INT AUTO_INCREMENT PRIMARY KEY,
-    cod_es INT NOT NULL,                         -- Estabelecimento a que pertence
+    cod_es INT NOT NULL,
+    usuario_func varchar(50),
+    senha_func varchar(50),
     nome_func VARCHAR(100) NOT NULL,
     cpf_func CHAR(11) NOT NULL,
     cargo_func VARCHAR(50) NOT NULL,
     salario_func DECIMAL(10,2) NOT NULL,
     data_admissao DATE NOT NULL,
-    ativo BOOLEAN DEFAULT TRUE,                  -- Se o funcionário ainda está ativo
+    ativo BOOLEAN DEFAULT TRUE,                 
     FOREIGN KEY (cod_es) REFERENCES Estabelecimentos(cod_es)
 );
-drop table Funcionarios;
 
 /*------------------- Colocando dados na tabela ------------------*/
 
@@ -116,17 +120,19 @@ insert into Estados(estado_uf, estado_nome) values
 ('SE', 'Sergipe'),
 ('TO', 'Tocantins');
 
-INSERT INTO Clientes (nome_cli, cpf_cli, cep_cli, endereco, complemento_cli, estado_uf, observacao) VALUES
-('Ana Beatriz Silva', '12345678901', '01001000', 'Rua das Flores, 123', 'Apto 21', 'SP', 'Cliente frequente'),
-('Carlos Eduardo Souza', '98765432100', '30140071', 'Av. Afonso Pena, 1000', 'Sala 12', 'MG', 'Prefere contato por e-mail'),
-('Juliana Lima Rocha', '45612378909', '20040002', 'Rua da Alfândega, 45', 'Loja 5', 'RJ', 'Solicitou nota fiscal'),
-('Mateus Oliveira', '32165498712', '60060100', 'Av. Domingos Olímpio, 300', 'Casa', 'CE', 'Nenhuma observação'),
-('Fernanda Alves', '85274196300', '70040900', 'SBN Quadra 1', 'Torre Norte', 'DF', 'VIP'),
-('Lucas Martins', '74185296311', '88010001', 'Rua Felipe Schmidt, 200', NULL, 'SC', 'Cliente novo'),
-('Patrícia Costa', '36925814733', '69005310', 'Av. Eduardo Ribeiro, 50', 'Cobertura', 'AM', 'Sempre compra combos'),
-('Diego Ferreira', '14725836900', '40010000', 'Praça Castro Alves, 10', NULL, 'BA', 'Solicitou envio por transportadora'),
-('Camila Mendes', '25836914788', '64000000', 'Rua São João, 222', 'Casa 1', 'PI', 'Cliente em análise'),
-('Bruno Henrique', '96385274122', '50010010', 'Av. Conde da Boa Vista, 888', 'Loja 1', 'PE', 'Pagamento no boleto');
+INSERT INTO Clientes (usuario_cli, senha_cli, nome_cli, cpf_cli, cep_cli, endereco, complemento_cli, estado_uf, observacao) VALUES
+('joaosilva', 'senha123', 'João da Silva', '12345678900', '01001000', 'Rua das Flores, 123', 'Apto 101', 'SP', 'Cliente novo'),
+('mariaoliveira', 'senha456', 'Maria Oliveira', '23456789011', '20040002', 'Avenida Central, 456', 'Casa', 'RJ', 'Prefere contato por e-mail'),
+('pedrosouza', 'senha789', 'Pedro Souza', '34567890122', '30130010', 'Rua da Paz, 789', 'Fundos', 'MG', 'Verificar pendências'),
+('anacosta', 'senha321', 'Ana Costa', '45678901233', '40010000', 'Travessa Alegre, 321', 'Cobertura', 'BA', 'Cliente VIP'),
+('lucasmoura', 'senha654', 'Lucas Moura', '56789012344', '60060000', 'Rua dos Lírios, 222', 'Bloco B', 'CE', 'Pede nota fiscal'),
+('fernandasilva', 'senha987', 'Fernanda Silva', '67890123455', '70040010', 'Quadra 5, Lote 10', 'Sem complemento', 'DF', 'Sempre paga em dia'),
+('carlosalmeida', 'senha159', 'Carlos Almeida', '78901234566', '80010110', 'Rua XV de Novembro, 400', 'Loja 2', 'PR', 'Cliente recorrente'),
+('julianasantos', 'senha753', 'Juliana Santos', '89012345677', '88010400', 'Rua da Praia, 98', 'Sala 4', 'SC', 'Solicita envio rápido'),
+('andreluiz', 'senha852', 'André Luiz', '90123456788', '96010000', 'Rua do Comércio, 77', 'Apto 303', 'RS', 'Verificar cadastro'),
+('laisrocha', 'senha741', 'Laís Rocha', '01234567899', '64000000', 'Rua das Palmeiras, 11', 'Casa térrea', 'PI', 'Cliente antiga');
+
+
 
 INSERT INTO Estabelecimentos (nome_es, endereco_es, complemento, estado_uf, cnpj_es, servico_es, postosDeTrabalho, totalDosCustos, totalDasVendas) VALUES
 ('Loja São Jorge', 'Rua das Palmeiras, 101', 'Loja 1', 'SP', '12345678000195', 'Varejo de Roupas', 12, 52000.00, 87000.00),
@@ -140,17 +146,21 @@ INSERT INTO Estabelecimentos (nome_es, endereco_es, complemento, estado_uf, cnpj
 ('Tech Center', 'Av. Tecnológica, 900', 'Andar 3', 'SP', '90000000000127', 'Suporte em TI', 15, 95000.00, 150000.00),
 ('Estúdio Criativo', 'Rua da Arte, 33', 'Sala 8', 'PR', '01234567000116', 'Design Gráfico', 3, 8000.00, 20000.00);
 
-INSERT INTO Funcionarios (cod_es, nome_func, cpf_func, cargo_func, salario_func, data_admissao, ativo) VALUES
-(1, 'João Pereira', '12345678901', 'Gerente', 5200.00, '2020-05-12', TRUE),
-(2, 'Maria Santos', '23456789012', 'Atendente', 1800.00, '2021-03-08', TRUE),
-(3, 'Paulo Oliveira', '34567890123', 'Estoquista', 2300.50, '2022-01-15', TRUE),
-(4, 'Luciana Costa', '45678901234', 'Caixa', 2100.00, '2023-07-03', TRUE),
-(5, 'Fernanda Lima', '56789012345', 'Gerente', 5500.00, '2019-10-01', TRUE),
-(6, 'Bruno Martins', '67890123456', 'Atendente', 1850.00, '2022-11-22', TRUE),
-(7, 'Carla Mendes', '78901234567', 'Recepcionista', 2000.00, '2021-04-05', FALSE),
-(8, 'Felipe Rocha', '89012345678', 'Auxiliar Administrativo', 2500.00, '2020-09-17', TRUE),
-(9, 'Aline Souza', '90123456789', 'Faxineira', 1600.00, '2018-06-28', TRUE),
-(10, 'Rodrigo Neves', '01234567890', 'Supervisor', 3200.00, '2023-02-14', TRUE);
+INSERT INTO Funcionarios (cod_es, usuario_func, senha_func, nome_func, cpf_func, cargo_func, salario_func, data_admissao, ativo) VALUES
+(1, 'mariarodrigues', 'func123', 'Maria Rodrigues', '12345678900', 'Gerente', 5200.00, '2022-03-15', 1),
+(2, 'joaopereira', 'func456', 'João Pereira', '23456789011', 'Vendedor', 2500.00, '2023-01-10', 1),
+(1, 'carlaalves', 'func789', 'Carla Alves', '34567890122', 'Auxiliar Administrativo', 2200.00, '2021-07-20', 1),
+(3, 'rodrigosoares', 'func321', 'Rodrigo Soares', '45678901233', 'TI - Suporte', 3500.00, '2020-11-05', 1),
+(2, 'fernandolima', 'func654', 'Fernando Lima', '56789012344', 'Financeiro', 4000.00, '2023-04-12', 1),
+(1, 'priscilacosta', 'func987', 'Priscila Costa', '67890123455', 'RH', 3800.00, '2022-09-30', 1),
+(3, 'andrehenrique', 'func159', 'André Henrique', '78901234566', 'Vendedor', 2400.00, '2021-01-25', 1),
+(2, 'laisfigueiredo', 'func753', 'Laís Figueiredo', '89012345677', 'Marketing', 3600.00, '2020-06-18', 1),
+(1, 'fabiosantos', 'func852', 'Fábio Santos', '90123456788', 'TI - Analista', 4200.00, '2022-12-01', 1),
+(3, 'julianamendes', 'func741', 'Juliana Mendes', '01234567899', 'Limpeza', 1600.00, '2023-08-09', 1);
+
+
+
+
 
 
 
