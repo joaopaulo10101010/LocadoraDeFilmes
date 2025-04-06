@@ -159,9 +159,3 @@ INSERT INTO Funcionarios (cod_es, usuario_func, senha_func, nome_func, cpf_func,
 (3, 'julianamendes', 'func741', 'Juliana Mendes', '01234567899', 'Limpeza', 1600.00, '2023-08-09', 1);
 
 
-
-
-
-
-
-
