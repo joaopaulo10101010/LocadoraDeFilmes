@@ -1,0 +1,46 @@
+﻿@model Locadora.Models.Clientes;
+@{
+	ViewData["Title"] = "Banco dos dados";
+}
+<h1>@ViewData["Title"]</h1>
+<h1>Insira um Cliente</h1>
+
+<form asp-action="BancoCliente" method="post">
+    <div>
+        <label>Usuario</label>
+        <input asp-for="usuario_cli" required />
+    </div>
+    <div>
+        <label>Senha:</label>
+        <input asp-for="senha_cli" required />
+    </div>
+    <div>
+        <label>Nome:</label>
+        <input asp-for="nome_cli" required />
+    </div>
+    <div>
+        <label>CPF:</label>
+        <input asp-for="cpf_cli" required />
+    </div>
+    <div>
+        <label>CEP:</label>
+        <input asp-for="cep_cli" required />
+    </div>
+    <div>
+        <label>Endereço:</label>
+        <input asp-for="endereco" required />
+    </div>
+    <div>
+        <label>Complemento:</label>
+        <input asp-for="complemento_cli" required />
+    </div>
+    <div>
+        <label>UF:</label>
+        <input asp-for="estado_uf" required />
+    </div>
+    <div>
+        <label>Observação:</label>
+        <input asp-for="observacao"/>
+    </div>
+    <button type="submit">Novo ClienteCadastrado</button>
+</form>

@@ -1,5 +1,6 @@
 ﻿using MySqlX.XDevAPI;
 using Locadora.Models;
+using MySql.Data.MySqlClient;
 
 namespace Locadora.Repositorios
 {
@@ -21,14 +22,17 @@ namespace Locadora.Repositorios
             using (var banco = new ConexaoMySQL(_stringconnection))
             {
                 var bancocmd = banco.MySqlCommand();
-                bancocmd.CommandText = "INSERT INTO Clientes (nome_cli, cpf_cli, cep_cli, endereco, complemento_cli, estado_uf, observacao) VALUES (@nome, @cpf, @cep, @endereco, @complemento, @estado, @observacao)";
+                bancocmd.CommandText = "INSERT INTO Clientes (usuario_cli, senha_cli, nome_cli, cpf_cli, cep_cli, endereco, complemento_cli, estado_uf, observacao) VALUES (@usuario, @senha, @nome, @cpf, @cep, @endereco, @complemento, @estado, @observacao)";
+                bancocmd.Parameters.AddWithValue("@usuario", clientes.usuario_cli);
+                bancocmd.Parameters.AddWithValue("@senha", clientes.senha_cli);
                 bancocmd.Parameters.AddWithValue("@nome", clientes.nome_cli);
-                bancocmd.Parameters.AddWithValue("@cpf", clientes.nome_cli);
-                bancocmd.Parameters.AddWithValue("@cep", clientes.nome_cli);
-                bancocmd.Parameters.AddWithValue("@endereco", clientes.nome_cli);
-                bancocmd.Parameters.AddWithValue("@complemento", clientes.nome_cli);
-                bancocmd.Parameters.AddWithValue("@estado", clientes.nome_cli);
-                bancocmd.Parameters.AddWithValue("@observacao", clientes.nome_cli);
+                bancocmd.Parameters.AddWithValue("@cpf", clientes.cpf_cli);
+                bancocmd.Parameters.AddWithValue("@cep", clientes.cep_cli);
+                bancocmd.Parameters.AddWithValue("@endereco", clientes.endereco);
+                bancocmd.Parameters.AddWithValue("@complemento", clientes.complemento_cli);
+                bancocmd.Parameters.AddWithValue("@estado", clientes.estado_uf);
+                bancocmd.Parameters.AddWithValue("@observacao", clientes.observacao);
+                Console.WriteLine(bancocmd.CommandText);
                 bancocmd.ExecuteNonQuery();
             }
         }
