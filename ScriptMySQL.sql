@@ -10,34 +10,6 @@ CREATE TABLE Estados (
 );
 
 /* ------------------- 2 ------------------ */ 
-CREATE TABLE Funcionarios (
-    usuario_fun VARCHAR(50),
-    senha_fun VARCHAR(50),
-    nome_fun VARCHAR(100) NOT NULL,
-    cpf_fun CHAR(11) NOT NULL PRIMARY KEY,
-    cep_fun CHAR(8) NOT NULL,
-    endereco_fun VARCHAR(50),
-    complemento_fun VARCHAR(50),
-    estado_uf CHAR(2) NOT NULL,
-    observacao_fun VARCHAR(500),
-    FOREIGN KEY (estado_uf) REFERENCES Estados(estado_uf)
-);
-
-/* ------------------- 3 ------------------ */ 
-CREATE TABLE Clientes (
-    usuario_cli VARCHAR(50),
-    senha_cli VARCHAR(50),
-    nome_cli VARCHAR(100) NOT NULL,
-    cpf_cli CHAR(11) NOT NULL PRIMARY KEY,
-    cep_cli CHAR(8) NOT NULL,
-    endereco VARCHAR(50),
-    complemento_cli VARCHAR(50),
-    estado_uf CHAR(2) NOT NULL,
-    observacao VARCHAR(500),
-    FOREIGN KEY (estado_uf) REFERENCES Estados(estado_uf)
-);
-
-/* ------------------- 4 ------------------ */ 
 CREATE TABLE Estabelecimentos (
     cod_es INT AUTO_INCREMENT PRIMARY KEY,
     nome_es VARCHAR(100) NOT NULL,
@@ -50,6 +22,40 @@ CREATE TABLE Estabelecimentos (
     valorGasto decimal(20,2),
     FOREIGN KEY (estado_uf) REFERENCES Estados(estado_uf)
 );
+/* ------------------- 3 ------------------ */ 
+CREATE TABLE Clientes (
+    usuario_cli VARCHAR(50),
+    senha_cli VARCHAR(50),
+    nome_cli VARCHAR(100) NOT NULL,
+    cpf_cli CHAR(11) NOT NULL PRIMARY KEY,
+    cep_cli CHAR(8) NOT NULL,
+    endereco VARCHAR(50),
+    complemento_cli VARCHAR(50),
+    estado_uf CHAR(2) NOT NULL,
+    pontos_cli int,
+    observacao VARCHAR(500),
+    FOREIGN KEY (estado_uf) REFERENCES Estados(estado_uf)
+);
+
+/* ------------------- 4 ------------------ */ 
+
+
+CREATE TABLE Funcionarios (
+	cod_es int,
+    usuario_fun VARCHAR(50),
+    senha_fun VARCHAR(50),
+    nome_fun VARCHAR(100) NOT NULL,
+    cpf_fun CHAR(11) NOT NULL PRIMARY KEY,
+    cep_fun CHAR(8) NOT NULL,
+    endereco_fun VARCHAR(50),
+    complemento_fun VARCHAR(50),
+    estado_uf CHAR(2) NOT NULL,
+    cargo_fun VARCHAR(50),
+    salario_fun decimal(20,2),
+    FOREIGN KEY (estado_uf) REFERENCES Estados(estado_uf),
+    foreign key (cod_es) references Estabelecimentos(cod_es)
+);
+
 
 /* ------------------- 5 ------------------ */ 
 CREATE TABLE Filmes (
@@ -60,6 +66,7 @@ CREATE TABLE Filmes (
     filme_preco DECIMAL(10,2),
     filme_pontos INT,
     filme_ano YEAR NOT NULL,
+    filme_desconto int,
     filme_quantidade INT NOT NULL
 );
 
@@ -134,31 +141,44 @@ INSERT INTO Estabelecimentos (nome_es, cnpj, cep, endereco, complemento, estado_
 ('Mega Vídeo',           '92345678000109', '02000000', 'Rua Recife, 900',    '',        'SP', 158000.90, 87000.55),
 ('VideoLoc',             '10345678000110','02111000', 'Av. Campinas, 1000',  '',        'SP', 143500.00, 69300.75);
 
-INSERT INTO Clientes (usuario_cli, senha_cli, nome_cli, cpf_cli, cep_cli, endereco, complemento_cli, estado_uf, observacao) VALUES
-('joaosilva',   'senha123',  'João da Silva',           '12345678901', '01001000', 'Rua A, 123',      'Apto 1',    'SP', 'Cliente frequente.'),
-('mariaolive',  'abc12345',  'Maria Oliveira',          '23456789012', '02002000', 'Av. B, 456',       '',         'RJ', 'Prefere filmes de ação.'),
-('carlosm',     '123senha',  'Carlos Martins',          '34567890123', '03003000', 'Rua C, 789',       '',         'MG', 'Solicita notificações por SMS.'),
-('anapaula99',  'senhaAna',  'Ana Paula Souza',         '45678901234', '04004000', 'Av. D, 321',       'Bloco B',  'BA', 'Cliente novo.'),
-('felipetec',   'tec45678',  'Felipe Teixeira',         '56789012345', '05005000', 'Rua E, 654',       'Casa',     'SP', 'Assinante de plano mensal.'),
-('beatriz.l',   'be@123',    'Beatriz Lima',            '67890123456', '06006000', 'Av. F, 987',       '',         'RJ', 'Sem observações.'),
-('ricardop',    'rp2024',    'Ricardo Pereira',         '78901234567', '07007000', 'Rua G, 111',       '',         'MG', 'Prefere lançamentos.'),
-('laisf',       'la12is34',  'Laís Ferreira',           '89012345678', '08008000', 'Av. H, 222',       'Apto 201', 'BA', 'Cliente VIP.'),
-('thiago.sil',  'ts@pass',   'Thiago Silveira',         '90123456789', '09009000', 'Rua I, 333',       '',         'SP', 'Indicado por outro cliente.'),
-('carolzinha',  'carol@321', 'Carolina Fernandes',      '01234567890', '10010000', 'Av. J, 444',       'Cobertura','RJ', 'Participou de promoções.');
-
-INSERT INTO Funcionarios (usuario_fun, senha_fun, nome_fun, cpf_fun, cep_fun, endereco_fun, complemento_fun, estado_uf, observacao_fun) VALUES
-('adminjoao',   'adm12345',   'João Batista',         '11122233344', '01001000', 'Rua Alfa, 100',     'Apto 2',     'SP', 'Gerente da unidade central.'),
-('marianunes',  'm456789',    'Mariana Nunes',        '22233344455', '02002000', 'Av. Beta, 200',     '',           'RJ', 'Responsável pelo setor de vendas.'),
-('cassiovieira','cas2024',    'Cássio Vieira',        '33344455566', '03003000', 'Rua Gama, 300',     'Casa 1',     'MG', 'Atendimento ao cliente.'),
-('alinef',      'a12line34',  'Aline Ferreira',       '44455566677', '04004000', 'Av. Delta, 400',    'Bloco C',    'BA', 'Nova contratação.'),
-('gustavob',    'gbpass2024', 'Gustavo Borges',       '55566677788', '05005000', 'Rua Épsilon, 500',  '',           'SP', 'RH e suporte técnico.'),
-('lilianam',    'liM123456',  'Liliana Martins',      '66677788899', '06006000', 'Av. Zeta, 600',     '',           'RJ', 'Coordenadora de marketing.'),
-('rodrigotp',   'rTp!321',    'Rodrigo Teixeira',     '77788899900', '07007000', 'Rua Eta, 700',      'Apto 5',     'MG', 'Líder de equipe.'),
-('julianac',    'jul@123',    'Juliana Costa',        '88899900011', '08008000', 'Av. Teta, 800',     'Sala 12',    'BA', 'Auxiliar administrativo.'),
-('pedrosilva',  'ps7890',     'Pedro da Silva',       '99900011122', '09009000', 'Rua Iota, 900',     '',           'SP', 'Funcionário do financeiro.'),
-('fabianar',    'fabR@2025',  'Fabiana Ribeiro',      '00011122233', '10010000', 'Av. Kappa, 1000',   'Cobertura',  'RJ', 'Analista de dados.');
+INSERT INTO Clientes (usuario_cli, senha_cli, nome_cli, cpf_cli, cep_cli, endereco, complemento_cli, estado_uf, pontos_cli, observacao) VALUES
+('ana.pereira', 'senhaAna2024', 'Ana Pereira', '12345678901', '11011000', 'Rua Paulista, 101', 'Apto 3', 'SP', 150, 'Cliente fiel, realiza compras com frequência.'),
+('marcos.silva', 'marcos123', 'Marcos Silva', '23456789012', '22022000', 'Av. Rio Branco, 202', 'Sala 12', 'RJ', 200, 'Interessado em promoções de filmes de ação.'),
+('carla.morais', 'carla@321', 'Carla Morais', '34567890123', '33033000', 'Rua XV de Novembro, 303', 'Casa 5', 'MG', 100, 'Cliente regular, gosta de comédias e dramas.'),
+('luiz.oliveira', 'luiz9876', 'Luiz Oliveira', '45678901234', '44044000', 'Av. Brasil, 404', 'Bloco B', 'BA', 50, 'Cliente ocasional, comprou recentemente um filme de terror.'),
+('daniela.souza', 'dani.souza', 'Daniela Souza', '56789012345', '55055000', 'Rua das Flores, 505', 'Apto 6', 'SP', 120, 'Compra filmes de aventura e animações com frequência.'),
+('pedro.melo', 'pedro456', 'Pedro Melo', '67890123456', '66066000', 'Rua dos Três Irmãos, 606', 'Casa 2', 'RJ', 300, 'Cliente ativo, sempre faz compras de grande valor.'),
+('marina.rodrigues', 'marina123', 'Marina Rodrigues', '78901234567', '77077000', 'Av. Luz, 707', 'Cobertura', 'MG', 250, 'Gosta de filmes românticos e drama.'),
+('victor.nascimento', 'vitor2024', 'Victor Nascimento', '89012345678', '88088000', 'Rua Sete de Setembro, 808', '', 'BA', 180, 'Cliente regular, com boa quantidade de compras realizadas.'),
+('lucas.gomes', 'lucas321', 'Lucas Gomes', '90123456789', '99099000', 'Av. Maré, 909', 'Apto 4', 'SP', 400, 'Comprador frequente, com destaque em filmes de ficção científica.'),
+('julia.santos', 'julia@567', 'Julia Santos', '01234567890', '10010000', 'Rua São João, 1010', 'Bloco A', 'RJ', 50, 'Cliente esporádica, com poucas compras, principalmente de animações.');
 
 
+INSERT INTO Funcionarios (cod_es, usuario_fun, senha_fun, nome_fun, cpf_fun, cep_fun, endereco_fun, complemento_fun, estado_uf, cargo_fun, salario_fun) VALUES
+(1,  'joaobatista',  'senha123',  'João Batista',     '11122233344', '01001000', 'Rua Alfa, 100',     'Apto 2',     'SP', 'Gerente Geral',        8500.00),
+(2,  'marianunes',   'mari456',   'Mariana Nunes',    '22233344455', '02002000', 'Av. Beta, 200',     '',           'RJ', 'Supervisora de Vendas', 6200.00),
+(3,  'cassio.v',     'cas789',    'Cássio Vieira',    '33344455566', '03003000', 'Rua Gama, 300',     'Casa 1',     'MG', 'Atendente',            2800.00),
+(4,  'aline.fer',    'aline2024', 'Aline Ferreira',   '44455566677', '04004000', 'Av. Delta, 400',    'Bloco C',    'BA', 'Caixa',                3200.00),
+(5,  'gustavob',     'gbpass',    'Gustavo Borges',   '55566677788', '05005000', 'Rua Épsilon, 500',  '',           'SP', 'RH',                   4500.00),
+(6,  'liliana.m',    'liMpass',   'Liliana Martins',  '66677788899', '06006000', 'Av. Zeta, 600',     '',           'RJ', 'Marketing',            5000.00),
+(7,  'rodrigotp',    'rtp@2024',  'Rodrigo Teixeira', '77788899900', '07007000', 'Rua Eta, 700',      'Apto 5',     'MG', 'Supervisor',           5800.00),
+(8,  'julianac',     'jul2025',   'Juliana Costa',    '88899900011', '08008000', 'Av. Teta, 800',     'Sala 12',    'BA', 'Administrativo',       4100.00),
+(9,  'pedrosilva',   'pedro@123', 'Pedro da Silva',   '99900011122', '09009000', 'Rua Iota, 900',     '',           'SP', 'Financeiro',           6300.00),
+(10, 'fabianar',     'fabR321',   'Fabiana Ribeiro',  '00011122233', '10010000', 'Av. Kappa, 1000',   'Cobertura',  'RJ', 'Analista de Dados',    7200.00);
+
+INSERT INTO Filmes (filme_nome, filme_produto, filme_genero, filme_preco, filme_pontos, filme_ano, filme_desconto, filme_quantidade) VALUES
+('Vingadores: Ultimato', 'Blu-ray', 'Ação', 89.90, 100, 2019, 15, 50),
+('O Rei Leão', 'DVD', 'Animação', 49.90, 80, 2019, 10, 120),
+('Parasita', 'Blu-ray', 'Drama', 69.90, 120, 2019, 20, 30),
+('Toy Story 4', 'DVD', 'Animação', 59.90, 70, 2019, 10, 150),
+('Coringa', 'Blu-ray', 'Ação', 79.90, 110, 2019, 5, 40),
+('O Irlandês', 'DVD', 'Crime', 79.90, 90, 2019, 0, 25),
+('Star Wars: A Ascensão Skywalker', 'Blu-ray', 'Aventura', 99.90, 150, 2019, 10, 60),
+('O Farol', 'DVD', 'Terror', 59.90, 60, 2019, 25, 20),
+('Aves de Rapina', 'Blu-ray', 'Ação', 79.90, 95, 2020, 10, 45),
+('Mulher-Maravilha 1984', 'DVD', 'Ação', 69.90, 85, 2020, 15, 75);
 
 
+
+select * from funcionarios;
 

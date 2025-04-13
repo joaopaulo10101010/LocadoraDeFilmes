@@ -2,16 +2,17 @@
 {
     public class Funcionarios
     {
-        public int func_cod { get; }
         public int cod_es { get; set; }
-        public string usuario_func {  get; set; }
-        public string senha_func { get; set; }
-        public string nome_func { get; set; }
-        public string cpf_func { get; set; }
-        public string cargo_func { get; set; }
-        public double salario_func { get; set; }
-        public DateTime data_admissao { get; set; }
-        public bool ativo {  get; set; }
+        public string usuario_fun {  get; set; }
+        public string senha_fun { get; set; }
+        public string nome_fun { get; set; }
+        public string cpf_fun { get; set; }
+        public string cep_fun { get; set; }
+        public string endereço_fun { get; set; }
+        public string? complemento_fun { get; set; }
+        public string estado_uf {  get; set; }
+        public string cargo_fun { get; set; }
+        public decimal salario_fun { get; set; }
         
     }
 }
