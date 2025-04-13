@@ -22,7 +22,7 @@ namespace Locadora.Repositorios
             using (var banco = new ConexaoMySQL(_stringconnection))
             {
                 var bancocmd = banco.MySqlCommand();
-                bancocmd.CommandText = "INSERT INTO Clientes (usuario_cli, senha_cli, nome_cli, cpf_cli, cep_cli, endereco, complemento_cli, estado_uf, observacao) VALUES (@usuario, @senha, @nome, @cpf, @cep, @endereco, @complemento, @estado, @observacao)";
+                bancocmd.CommandText = "INSERT INTO Clientes (usuario_cli, senha_cli, nome_cli, cpf_cli, cep_cli, endereco, complemento_cli, estado_uf, pontos_cli, observacao) VALUES (@usuario, @senha, @nome, @cpf, @cep, @endereco, @complemento, @estado, @pontos, @observacao)";
                 bancocmd.Parameters.AddWithValue("@usuario", clientes.usuario_cli);
                 bancocmd.Parameters.AddWithValue("@senha", clientes.senha_cli);
                 bancocmd.Parameters.AddWithValue("@nome", clientes.nome_cli);
@@ -31,43 +31,51 @@ namespace Locadora.Repositorios
                 bancocmd.Parameters.AddWithValue("@endereco", clientes.endereco);
                 bancocmd.Parameters.AddWithValue("@complemento", clientes.complemento_cli);
                 bancocmd.Parameters.AddWithValue("@estado", clientes.estado_uf);
+                bancocmd.Parameters.AddWithValue("@pontos", clientes.pontos_cli);
                 bancocmd.Parameters.AddWithValue("@observacao", clientes.observacao);
-                Console.WriteLine(bancocmd.CommandText);
                 bancocmd.ExecuteNonQuery();
             }
         }
-        public Clientes ProcurarCliente(string cod_cli)
+        public Clientes ProcurarCliente(string cpf_cli)
         {
-            using (var banco = new ConexaoMySQL(_stringconnection))
+            try
             {
-                var bancocmd = banco.MySqlCommand();
-                bancocmd.CommandText = "Select * from Clientes where cod_cli='@cod_cli'";
-                bancocmd.Parameters.AddWithValue("@cod_cli", cod_cli);
-                bancocmd.ExecuteNonQuery();
-
-
-                using (var leitor = bancocmd.ExecuteReader())
+                using (var banco = new ConexaoMySQL(_stringconnection))
                 {
-                    if (leitor.Read())
+                    var bancocmd = banco.MySqlCommand();
+                    bancocmd.CommandText = "SELECT * FROM Clientes WHERE cpf_cli = @cpf_cli";
+                    bancocmd.Parameters.AddWithValue("@cpf_cli", cpf_cli);
+
+                    using (var leitor = bancocmd.ExecuteReader())
                     {
-                        return new Clientes
+                        if (leitor.Read())
                         {
-                            cod_cli = leitor.GetInt32("cod_cli"),
-                            usuario_cli = leitor.GetString("usuario_cli"),
-                            senha_cli = leitor.GetString("senha_cli"),
-                            nome_cli = leitor.GetString("nome_cli"),
-                            cpf_cli = leitor.GetString("cpf_cli"),
-                            cep_cli = leitor.GetString("cep_cli"),
-                            endereco = leitor.GetString("endereco"),
-                            complemento_cli = leitor.GetString("complemento_cli"),
-                            estado_uf = leitor.GetString("estado_uf"),
-                            observacao = leitor.GetString("observacao"),
-                        };
+                            return new Clientes
+                            {
+                                usuario_cli = leitor.GetString("usuario_cli"),
+                                senha_cli = leitor.GetString("senha_cli"),
+                                nome_cli = leitor.GetString("nome_cli"),
+                                cpf_cli = leitor.GetString("cpf_cli"),
+                                cep_cli = leitor.GetString("cep_cli"),
+                                endereco = leitor.GetString("endereco"),
+                                complemento_cli = leitor.GetString("complemento_cli"),
+                                estado_uf = leitor.GetString("estado_uf"),
+                                pontos_cli = leitor.GetInt32("pontos_cli"),
+                                observacao = leitor.GetString("observacao"),
+                            };
+                        }
                     }
-                    return null;
                 }
-            }  
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao procurar cliente: {ex.Message}");
+                return null;
+            }
         }
+
 
 
 
